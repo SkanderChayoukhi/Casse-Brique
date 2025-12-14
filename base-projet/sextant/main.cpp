@@ -1,141 +1,139 @@
 #include <hal/multiboot.h>
 #include <drivers/Ecran.h>
-#include <drivers/PortSerie.h>
-
-// TP2
+#include <drivers/Clavier.h>
+#include <drivers/timer.h>
 #include <sextant/interruptions/idt.h>
 #include <sextant/interruptions/irq.h>
-#include <sextant/interruptions/handler/handler_tic.h>
 #include <sextant/interruptions/handler/handler_clavier.h>
-#include <drivers/timer.h>
-#include <drivers/Clavier.h>
-// TP3
 #include <sextant/memoire/memoire.h>
 
-// TP4
-#include <sextant/ordonnancements/cpu_context.h>
-#include <sextant/ordonnancements/preemptif/thread.h>
-#include <sextant/types.h>
+extern char __e_kernel;
+extern vaddr_t bootstrap_stack_bottom;
+extern size_t bootstrap_stack_size;
 
+extern "C" void Sextant_main(unsigned long magic, unsigned long addr)
+{
+Ecran ecran;
+ecran.effacerEcran(NOIR);
+ecran.afficherMot("=== CASSE BRIQUE ===", BLANC);
+ecran.sautDeLigne();
+ecran.sautDeLigne();
 
-#include <sextant/Synchronisation/Spinlock/Spinlock.h>
+idt_setup();
+irq_setup();
 
-#include <hal/pci.h>
-#include <drivers/vga.h>
-#include <drivers/EcranBochs.h>
+Timer timer;
+timer.i8254_set_frequency(1000);
+irq_set_routine(IRQ_KEYBOARD, handler_clavier);
 
-#include <sextant/sprite.h>
+multiboot_info_t *mbi;
+mbi = (multiboot_info_t *)addr;
+mem_setup(&__e_kernel, (mbi->mem_upper << 10) + (1 << 20), &ecran);
 
+ecran.afficherMot("System OK!", VERT);
+ecran.sautDeLigne();
+ecran.afficherMot("Controls: Q=Left D=Right", JAUNE);
+ecran.sautDeLigne();
+ecran.afficherMot("Press Q or D to start...", BLANC);
 
-extern char __e_kernel,__b_kernel, __b_data, __e_data,  __b_stack, __e_load ;
-int i;
+asm volatile("sti\n");
 
-extern vaddr_t bootstrap_stack_bottom; //Adresse de début de la pile d'exécution
-extern size_t bootstrap_stack_size;//Taille de la pile d'exécution
+Clavier keyboard;
 
-void demo_vga() {
-	set_vga_mode13(); // set VGA mode
-	set_palette_vga(palette_vga); // set to given palette
-
-	ui16_t offset = 0;
-	while(1) {
-		clear_vga_screen(0); // put the color 0 on each pixel
-		plot_square(offset, 50, 25, 4); // plot a square of 25 width at 50,50 of color 4
-		draw_sprite(sprite_door_data, 32, 32, 100,100); // draw the 32x32 sprite at 100,100
-		offset = (offset + 1) % 640;
-	}
+while (!keyboard.is_pressed(AZERTY::K_Q) && !keyboard.is_pressed(AZERTY::K_D)) {
+for (volatile int i = 0; i < 1000000; i++);
 }
 
-void demo_bochs_8() {
-	ui16_t WIDTH = 640, HEIGHT = 400;
-	EcranBochs vga(WIDTH, HEIGHT, VBE_MODE::_8);
-	const char SPEED = 2;
-	Clavier c;
+// TEXT MODE GAME
+int ballX = 40, ballY = 12;
+int ballDx = 1, ballDy = 1;
+int paddle1X = 35, paddle1Y = 2;
+int paddle2X = 35, paddle2Y = 22;
+int paddleW = 10;
+int lives = 3;
 
-    vga.init();
-    vga.clear(0);
+char bricks[5][10];
+for (int r = 0; r < 5; r++)
+for (int c = 0; c < 10; c++)
+bricks[r][c] = '#';
 
-    // only usefull in 4 or 8 bits modes
-    vga.set_palette(palette_vga);
-    vga.plot_palette(0, 0, 25);
+while (lives > 0) {
+for (volatile int i = 0; i < 5000000; i++);
 
-	int x = 0, y = 0;
-
-	while (true) {
-
-		if (c.is_pressed(AZERTY::K_Z)) {
-			y -= SPEED;
-			if (y < 0) y += HEIGHT;
-		}
-		if (c.is_pressed(AZERTY::K_Q)) {
-			x -= SPEED;
-			if (x < 0) x += WIDTH;
-		}
-		if (c.is_pressed(AZERTY::K_S)) {
-			y = (y + SPEED) % HEIGHT;
-		}
-		if (c.is_pressed(AZERTY::K_D)) {
-			x = (x + SPEED) % WIDTH;
-		}
-		
-		vga.clear(1);
-		vga.plot_sprite(sprite_data, SPRITE_WIDTH, SPRITE_HEIGHT, x, y);
-		vga.swapBuffer(); // call this after you finish drawing your frame to display it, it avoids screen tearing
-	}
+if (keyboard.is_pressed(AZERTY::K_Q)) {
+if (paddle1X > 0) paddle1X--;
+}
+if (keyboard.is_pressed(AZERTY::K_D)) {
+if (paddle1X < 70) paddle1X++;
 }
 
-void demo_bochs_32() {
-	EcranBochs vga(640, 400, VBE_MODE::_32);
+// AI
+if (ballX < paddle2X + 5) paddle2X--;
+else if (ballX > paddle2X + 5) paddle2X++;
+if (paddle2X < 0) paddle2X = 0;
+if (paddle2X > 70) paddle2X = 70;
 
-	vga.init();
-	
-	ui8_t offset = 0;
-	while(true) {
-		
-		for (int y = 0; y < vga.getHeight(); y++) {
-			for (int x = 0; x < vga.getWidth(); x++) {
-				vga.paint(x, y, 
-					(~x << y%3) + offset & y, 
-					~offset * (x & ~y), 
-					offset | (~y < 2 - x % 16));
-			}
-		}
-		++offset;
-	}
+// Ball physics
+ballX += ballDx;
+ballY += ballDy;
+
+if (ballX <= 0 || ballX >= 79) ballDx = -ballDx;
+if (ballY <= 0) ballDy = -ballDy;
+
+// Paddle collision
+if (ballY == paddle1Y && ballX >= paddle1X && ballX < paddle1X + paddleW) ballDy = -ballDy;
+if (ballY == paddle2Y && ballX >= paddle2X && ballX < paddle2X + paddleW) ballDy = -ballDy;
+
+// Brick collision
+if (ballY >= 8 && ballY < 13) {
+int br = ballY - 8;
+int bc = (ballX - 15) / 5;
+if (bc >= 0 && bc < 10 && bricks[br][bc] == '#') {
+bricks[br][bc] = ' ';
+ballDy = -ballDy;
+}
 }
 
-extern "C" void Sextant_main(unsigned long magic, unsigned long addr){
-	Ecran ecran;
-	Timer timer;
+// Lost ball
+if (ballY >= 24) {
+lives--;
+ballX = 40; ballY = 12;
+ballDx = 1; ballDy = 1;
+}
 
-	idt_setup();
-	irq_setup();
-	//Initialisation de la frequence de l'horloge
+// RENDER
+ecran.effacerEcran(NOIR);
+ecran.afficherMot("Lives:", BLANC);
+if (lives == 3) ecran.afficherMot(" ***", ROUGE);
+else if (lives == 2) ecran.afficherMot(" **", ROUGE);
+else ecran.afficherMot(" *", ROUGE);
+ecran.afficherMot("  CASSE BRIQUE", VERT);
+ecran.sautDeLigne();
 
-	timer.i8254_set_frequency(1000);
-	irq_set_routine(IRQ_TIMER, ticTac);
+// Paddle 1
+for (int i = 0; i < paddleW; i++)
+ecran.afficherCaractere(paddle1Y, paddle1X + i, ROUGE, NOIR, '=');
 
-	asm volatile("sti\n");//Autorise les interruptions
+// Paddle 2
+for (int i = 0; i < paddleW; i++)
+ecran.afficherCaractere(paddle2Y, paddle2X + i, BLEU, NOIR, '=');
 
-	irq_set_routine(IRQ_KEYBOARD, handler_clavier);
+// Bricks
+for (int r = 0; r < 5; r++) {
+for (int c = 0; c < 10; c++) {
+if (bricks[r][c] == '#')
+ecran.afficherCaractere(8 + r, 15 + c*5, JAUNE, NOIR, '#');
+}
+}
 
-	multiboot_info_t* mbi;
-	mbi = (multiboot_info_t*)addr;
+// Ball
+ecran.afficherCaractere(ballY, ballX, BLANC, NOIR, 'O');
+}
 
-	mem_setup(& __e_kernel,(mbi->mem_upper<<10) + (1<<20),&ecran);
+ecran.effacerEcran(NOIR);
+ecran.afficherMot("GAME OVER!", ROUGE);
+ecran.sautDeLigne();
+ecran.afficherMot("Thanks for playing!", BLANC);
 
-	ecran.effacerEcran(NOIR);
-
-	thread_subsystem_setup(bootstrap_stack_bottom,bootstrap_stack_size);
-	sched_subsystem_setup();
-
-	irq_set_routine(IRQ_TIMER, sched_clk);
-
-	// initialize pci bus to detect GPU address
-	checkBus(0);
-
-
-	// demo_vga();
-	demo_bochs_8();
-	// demo_bochs_32();
+while (1);
 }

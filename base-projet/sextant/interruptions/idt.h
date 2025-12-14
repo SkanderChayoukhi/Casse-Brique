@@ -32,19 +32,18 @@
  */
 
 #include <sextant/types.h>
-//#include <hal/segment.h>
-
+// #include <hal/segment.h>
 
 /* Mapping of the CPU exceptions in the IDT (imposed by Intel
    standards) */
 #define EXCEPT_BASE 0
-#define EXCEPT_NUM  32
-#define EXCEPT_MAX  (HWEXCEPT_BASE + HWEXCEPT_NUM - 1)
+#define EXCEPT_NUM 32
+#define EXCEPT_MAX (HWEXCEPT_BASE + HWEXCEPT_NUM - 1)
 
 /* Mapping of the IRQ lines in the IDT */
-#define IRQ_BASE    32
-#define IRQ_NUM     16
-#define IRQ_MAX     (IRQ_BASE + IRQ_NUM - 1)
+#define IRQ_BASE 32
+#define IRQ_NUM 16
+#define IRQ_MAX (IRQ_BASE + IRQ_NUM - 1)
 
 /**
  * Number of IDT entries.
@@ -54,7 +53,7 @@
  * will be 0x42, it must be >= 0x43. Intel doc limits this to 256
  * entries, we use this limit.
  */
-#define IDTE_NUM      256 /* 0x100 */
+#define IDTE_NUM 256 /* 0x100 */
 
 /**
  * An entry in the IDT, or "IDTE" in the following, ie a reference to
@@ -65,21 +64,20 @@
  */
 struct x86_idt_entry
 {
-  /* Low dword */
-  ui16_t offset_low;  /* 15..0, offset of the routine in the segment */
-  ui16_t seg_sel;     /* 31..16, the ID of the segment */
+   /* Low dword */
+   ui16_t offset_low; /* 15..0, offset of the routine in the segment */
+   ui16_t seg_sel;    /* 31..16, the ID of the segment */
 
-  /* High dword */
-  ui8_t reserved:5;   /* 4..0 */
-  ui8_t flags:3;      /* 7..5 */
-  ui8_t type:3;       /* 10..8 (interrupt gate, trap gate...) */
-  ui8_t op_size:1;    /* 11 (0=16bits instructions, 1=32bits instr.) */
-  ui8_t zero:1;       /* 12 */
-  ui8_t dpl:2;        /* 14..13 */
-  ui8_t present:1;    /* 15 */
-  ui16_t offset_high; /* 31..16 */
+   /* High dword */
+   ui8_t reserved : 5; /* 4..0 */
+   ui8_t flags : 3;    /* 7..5 */
+   ui8_t type : 3;     /* 10..8 (interrupt gate, trap gate...) */
+   ui8_t op_size : 1;  /* 11 (0=16bits instructions, 1=32bits instr.) */
+   ui8_t zero : 1;     /* 12 */
+   ui8_t dpl : 2;      /* 14..13 */
+   ui8_t present : 1;  /* 15 */
+   ui16_t offset_high; /* 31..16 */
 } __attribute__((packed));
-
 
 /**
  * The IDT register, which stores the address and size of the
@@ -89,22 +87,21 @@ struct x86_idt_entry
  */
 struct x86_idt_register
 {
-  /* The maximum GDT offset allowed to access an entry in the GDT */
-  ui16_t  limit;
+   /* The maximum GDT offset allowed to access an entry in the GDT */
+   ui16_t limit;
 
-  /* This is not exactly a "virtual" address, ie an adddress such as
-     those of instructions and data; this is a "linear" address, ie an
-     address in the paged memory. However, in SOS we configure the
-     segmented memory as a "flat" space: the 0-4GB segment-based (ie
-     "virtual") addresses directly map to the 0-4GB paged memory (ie
-     "linear"), so that the "linear" addresses are numerically equal
-     to the "virtual" addresses: this base_addr will thus be the same
-     as the address of the gdt array */
-  ui32_t base_addr;
-} __attribute__((packed, aligned (8)));
+   /* This is not exactly a "virtual" address, ie an adddress such as
+      those of instructions and data; this is a "linear" address, ie an
+      address in the paged memory. However, in SOS we configure the
+      segmented memory as a "flat" space: the 0-4GB segment-based (ie
+      "virtual") addresses directly map to the 0-4GB paged memory (ie
+      "linear"), so that the "linear" addresses are numerically equal
+      to the "virtual" addresses: this base_addr will thus be the same
+      as the address of the gdt array */
+   ui32_t base_addr;
+} __attribute__((packed, aligned(8)));
 
-
-static struct x86_idt_entry    idt[IDTE_NUM];
+static struct x86_idt_entry idt[IDTE_NUM];
 
 /** Initialization routine: all the IDT entries (or "IDTE") are marked
     "not present". */
@@ -119,9 +116,8 @@ sextant_ret_t idt_setup(void);
  * @note IRQ Unsafe
  */
 sextant_ret_t idt_set_handler(int index,
-			      vaddr_t handler_address,
-			      int lowest_priviledge /* 0..3 */);
-
+                              vaddr_t handler_address,
+                              int lowest_priviledge /* 0..3 */);
 
 /**
  * @note IRQ Unsafe
@@ -130,7 +126,7 @@ sextant_ret_t idt_set_handler(int index,
  * parameters
  */
 sextant_ret_t idt_get_handler(int index,
-			      vaddr_t *handler_address,
-			      int *lowest_priviledge);
+                              vaddr_t *handler_address,
+                              int *lowest_priviledge);
 
 #endif

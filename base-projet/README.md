@@ -123,3 +123,30 @@ It is assumed in `draw_sprite` that the transparent color (not drawed) is the 25
 [Palettes](https://lospec.com/palette-list)
 [Pixel editor](https://apps.lospec.com/pixel-editor)
 [Free sprites](https://itch.io/game-assets/free)
+
+
+
+
+<!-- CASSE BRIQUE - Game Report
+
+1. Overview
+   - Breakout game on bare-metal x86 kernel
+   - 3 concurrent threads: Ball physics, Human paddle, AI paddle
+   - Uses Mutex for synchronization, Semaphore for events
+
+2. Implementation
+   - Ball thread: Bounces ball off walls, protected position
+   - Paddle threads: Human (keyboard), AI (tracking ball)
+   - GameManager: Creates threads, renders sprites
+
+3. Synchronization
+   - Mutex positionMutex: Protects ball and paddle positions
+   - Semaphore collisionSem: Signals when collisions occur
+   - All from Lab 5 patterns
+
+4. How It Works
+   - Kernel boots, calls game_start()
+   - game_start() creates Ball and Paddle threads
+   - Timer interrupt triggers preemptive scheduling
+   - All threads run concurrently
+   - Main loop renders positions to screen -->

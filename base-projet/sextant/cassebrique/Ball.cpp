@@ -1,7 +1,3 @@
-/*
- * Ball.cpp - Ball physics and movement thread
- */
-
 #include <sextant/cassebrique/Ball.h>
 
 Ball::Ball(Mutex *posMutex, Semaphore *collisionSem)
@@ -12,11 +8,10 @@ Ball::Ball(Mutex *posMutex, Semaphore *collisionSem)
 
 void Ball::run()
 {
-    // Ball movement loop - runs in preemptive thread
-    while (active)
+    while (true)
     {
-        // Delay for animation speed
-        for (volatile int i = 0; i < 50000; i++)
+        // Delay to control ball speed
+        for (volatile int i = 0; i < 100000; i++)
             ;
 
         // Update position with mutex protection
@@ -25,11 +20,18 @@ void Ball::run()
         x += dx;
         y += dy;
 
-        // Simple wall collisions
-        if (x <= 0 || x >= 640 - 32)
+        // Wall collision detection
+        if (x <= 0 || x >= SCREEN_WIDTH - BALL_SIZE)
             dx = -dx;
-        if (y <= 0 || y >= 400 - 32)
+
+        if (y <= GAME_AREA_TOP)
             dy = -dy;
+
+        // Ball lost at bottom
+        if (y > GAME_AREA_BOTTOM)
+        {
+            active = false;
+        }
 
         positionLock->unlock();
 
@@ -38,6 +40,7 @@ void Ball::run()
     }
 }
 
+// Thread-safe getter
 void Ball::getPosition(int &outX, int &outY)
 {
     positionLock->lock();
@@ -46,6 +49,7 @@ void Ball::getPosition(int &outX, int &outY)
     positionLock->unlock();
 }
 
+// Thread-safe setter
 void Ball::setPosition(int newX, int newY)
 {
     positionLock->lock();
@@ -54,6 +58,7 @@ void Ball::setPosition(int newX, int newY)
     positionLock->unlock();
 }
 
+// Thread-safe velocity setter
 void Ball::setVelocity(int newDx, int newDy)
 {
     positionLock->lock();
@@ -65,10 +70,36 @@ void Ball::setVelocity(int newDx, int newDy)
 void Ball::reset()
 {
     positionLock->lock();
-    x = 320;
-    y = 200;
+    x = SCREEN_WIDTH / 2;
+    y = SCREEN_HEIGHT / 2;
     dx = 2;
     dy = 2;
     active = true;
     positionLock->unlock();
+}
+
+bool Ball::checkWallCollision()
+{
+    positionLock->lock();
+    bool hitWall = (x <= 0 || x >= SCREEN_WIDTH - BALL_SIZE ||
+                    y <= GAME_AREA_TOP);
+    positionLock->unlock();
+    return hitWall;
+}
+
+bool Ball::checkPaddleCollision(int paddleX, int paddleY,
+                                int paddleWidth, int paddleHeight)
+{
+    positionLock->lock();
+
+    bool collisionX = (x < paddleX + paddleWidth) &&
+                      (x + BALL_SIZE > paddleX);
+    bool collisionY = (y < paddleY + paddleHeight) &&
+                      (y + BALL_SIZE > paddleY);
+
+    bool collision = collisionX && collisionY;
+
+    positionLock->unlock();
+
+    return collision;
 }
