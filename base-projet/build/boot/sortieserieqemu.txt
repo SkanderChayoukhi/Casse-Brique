@@ -1,32 +1,108 @@
-testtesttra
-lala1
-lala2
-lala3
-lala4
-lala5
-lala6
-lala7
-lala8
-lala9
-lala10
-lala11
-lala12
-lala13
-lala14
-lala15
-lala16
-lala17
-lala18
-lala19
-lala20
-lala21
-lala22
-lala23
-lala24
-lala25
-lala26
-lala27
-lala28
-lala29
-lala30
-testtesttesttesttesttesttesttesttesttest
+c[?7l[2J[0mSeaBIOS (version rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org)
+Booting from Hard Disk...
+Boot failed: could not read the boot disk
+
+Booting from Floppy...
+Boot failed: could not read the boot disk
+
+Booting from DVD/CD...
+Loading stage2 ....
+[01;01H[2J
+    GNU GRUB  version 0.97  (639K lower / 129920K upper memory)[04;02H┌[04;02H[04;03H─────────────────────────────────────────────────[04;51H[04;52H────────────────────────┐[05;02H│[05;76H│[06;02H│[06;76H│[07;02H│[07;76H│[08;02H│[08;02H[08;76H│[09;02H│[09;76H│[10;02H│[10;76H│[11;02H│[11;76H│[12;02H│[12;76H│[13;02H│[13;76H│[14;02H│[14;76H│[15;02H│[15;76H│[16;02H│[16;76H│[16;76H[17;02H└─────────────────────────────────────────────[17;47H[17;48H────────────────────────────┘
+      Use t[18;11H[18;12Hhe ↑ and ↓ keys to select which entry is highlighted.
+      Press enter to boot the selected OS, 'e' to edit the
+      commands before booting, or 'c' for a command-line.[05;78H [05;78H[05;03H[0;30;47m Sextant                                                    [05;62H[05;63H             [06;03H[0m SOS                                                                     [07;03H                 [07;19H[07;20H                                                        [08;03H                                                                   [08;69H[08;70H      [09;03H                                                                         [10;03H                                           [10;45H[10;46H                              [11;03H                                                                [11;66H[11;67H         [12;03H                                                                         [13;03H                                                                         [14;03H                                                                         [15;03H                          [15;28H[15;29H                                               [16;03H                                                           [16;61H[16;62H              [16;78H [23;04HThe highlighted entry will be booted automatically in 1 seconds.    [05;75H[01;01H[2J  Booting 'Sextant'
+
+dhcp
+Probing...[NE*000]
+NE2000 base 0x0300, addr 52:54:00:12:34:56
+Address: 10[06;11H[06;12H.0.2.15
+Netmask: 255.255.255.0
+Server: 10.0.2.2
+Gateway: 10.0.2.2
+kernel (nd)/sextant.elf
+   [Multiboot-elf, <0x200000:0x24:0x0>, <0x201000:0x8c70:0x0>, <0x20a18d:0x0:0x
+43e73>, shtab=0x24e398, entry=0x201a74]
+booc[?7l[2J[0mSeaBIOS (version rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org)
+Booting from Hard Disk...
+Boot failed: could not read the boot disk
+
+Booting from Floppy...
+Boot failed: could not read the boot disk
+
+Booting from DVD/CD...
+Loading stage2 ....
+[01;01H[2J
+    GNU GRUB  version 0.97  (639K lower / 1[02;43H[02;44H29920K upper memory)[04;02H┌─────────────────────────────────────────────[04;47H[04;48H────────────────────────────┐[05;02H│[05;76H│[06;02H│[06;76H│[07;02H│[07;76H│[08;02H│[08;02H[08;76H│[09;02H│[09;76H│[10;02H│[10;76H│[11;02H│[11;76H│[12;02H│[12;76H│[13;02H│[13;76H│[14;02H│[14;76H│[14;76H[15;02H│[15;76H│[16;02H│[16;76H│[17;02H└─────────[17;11H[17;12H─────────────────[17;28H[17;29H───────────────────────────────[17;59H[17;60H────────────────┘
+      Use the ↑ and ↓[18;21H[18;22H keys to select which entry is highlighted.
+      Press enter t[19;19H[19;20Ho boot the selected OS, 'e' to edit the
+      commands be[20;17H[20;18Hfore booting, or 'c' for a command-line.[05;78H [05;03H[0;30;47m [05;03H[05;04HSextant                                                                 [06;03H[0m SOS                                       [06;45H[06;46H                              [07;03H                                                    [07;54H[07;55H                     [08;03H                                                       [08;57H[08;58H                  [09;03H                                                                    [09;70H[09;71H     [10;03H                                                                         [11;03H                    [11;22H[11;23H                                                     [12;03H                                         [12;43H[12;44H                                [13;03H                                                                     [13;71H[13;72H    [14;03H                                                                         [15;03H                                                                         [16;03H                                   [16;37H[16;38H                                      [16;78H [23;04HThe highlighted entry will be booted automatical[23;51H[23;52Hly in 1 seconds.    [05;75H[01;01H[2J  Booting 'Sextant'
+
+dhcp
+Probing...[NE*000]
+N[05;02HE2000 base 0x0300, addr 52:54:00:12:34:56
+Address: 10.0.2.15
+Netmask: 255.255.255.0
+Server: 10.0.2.2
+Gateway: 10.0.2.2
+kernel (nd)/sextant.elf
+   [Multiboot-elf, <0x200000:0x24:0x0>, <0x201000:0x8c70:0x0>, <0x20a18d:0x[11;75H[11;76H0:0x
+43e73>, shtab=0x24e398, entry=0x201a74]
+booc[?7l[2J[0mSeaBIOS (version rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org)
+Booting from Hard Disk...
+Boot failed: could not read the boot disk
+
+Booting from Floppy...
+Boot failed: could not read the boot disk
+
+Booting from DVD/CD...
+Loading stage2 ....[01;01H[2J
+    GNU GRUB  version 0.97  (639K lower / [02;42H[02;43H129920K upper memory)[04;02H┌─────────────────────────────────────────────[04;47H[04;48H────────────────────────────┐[05;02H│[05;76H│[06;02H│[06;76H│[07;02H│[07;76H│[08;02H│[08;76H│[09;02H│[09;76H│[10;02H│[10;76H│[11;02H│[11;02H[11;76H│[12;02H│[12;76H│[13;02H│[13;76H│[14;02H│[14;76H│[15;02H│[15;76H│[16;02H│[16;76H│[17;02H└───────────────────────[17;25H[17;26H──────────────────────────────────────────────────┘
+      Use the ↑ and ↓ [18;22H[18;23Hkeys to select which entry is highlighted.
+      Press enter to boot the selected OS, 'e' to edit the
+      commands before booti[20;27H[20;28Hng, or 'c' for a command-line.[05;78H [05;03H[0;30;47m Sextant                                                                 [06;03H[0m SOS   [06;09H[06;10H                                                                  [07;03H                                                              [07;64H[07;65H           [08;03H                                                                         [09;03H                                             [09;47H[09;48H                            [10;03H                                                                         [11;03H                                                                         [12;03H                                                                    [12;70H[12;71H     [13;03H                                                                         [14;03H                                                                         [15;03H                                                                         [16;03H                         [16;27H[16;28H                                                [16;78H [23;04HThe highlighted entry will be booted automatically in 1 seconds.    [05;75H[01;01H[2J  Booting 'Sextant'
+
+dhcp
+Probing...[NE*000]
+NE2000 base 0x0300, addr 52:54:00:12:34:56
+Address: 10.0.2.15
+Netmask: 255.255.255.0
+Server: 10.0.2.2
+Gateway: 10.0.2.2
+kernel (nd)/sextant.elf
+   [Multiboot[11;13H[11;14H-elf, <0x200000:0x24:0x0>, <0x201000:0x8c70:0x0>, <0x20a18d:0x0:0x
+43e73>, shtab=0x24e398, entry=0x201a74]
+booc[?7l[2J[0mSeaBIOS (version rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org)
+Booting from Hard Disk...
+Boot failed: could not read the boot disk
+
+Booting from Floppy...
+Boot failed: could not read the boot disk
+
+Booting from DVD/CD...
+Loading stage2 ....[01;01H[2J
+    GNU GRUB  version 0.97  (639K lower / 129920K upp[02;53H[02;54Her memory)[04;02H┌───────────────────────────────────────────────────────────[04;61H[04;62H──────────────┐[05;02H│[05;76H│[06;02H│[06;76H│[07;02H│[07;76H│[08;02H│[08;76H│[09;02H│[09;76H│[10;02H│[10;76H│[11;02H│[11;76H│[12;02H│[12;76H│[13;02H│[13;02H[13;76H│[14;02H│[14;76H│[15;02H│[15;76H│[16;02H│[16;76H│[17;02H└───────────────────────────────────────────[17;45H[17;46H──────────────────────────────┘
+      Use the ↑ and ↓ keys to select which entry is highlighted[18;63H[18;64H.
+      Press enter to boot the selected OS, 'e' to edit the
+      commands before booting, or 'c' for a command-line.[05;78H [05;78H[05;03H[0;30;47m Sextant                                                                 [06;03H[0m SOS                                    [06;42H[06;43H                                 [07;03H                                                                         [08;03H                    [08;22H[08;23H                                                     [09;03H                                                                         [10;03H [10;03H[10;04H                                                                        [11;03H                                          [11;44H[11;45H                               [12;03H                                                                         [13;03H                                                                         [14;03H                                                                         [15;03H       [15;09H[15;10H                                                                  [16;03H                                                  [16;52H[16;53H                       [16;78H [23;04HThe highlighted entry will be booted automatically in 1 seconds.    [05;75H[01;01H[2J  Booting 'Sextant[01;18H[01;19H'
+
+dhcp
+Probing...[NE*000]
+NE2000 base 0x0300, addr 52:54:00:12:34:56
+Address: 10.0.2.15
+Netmask: 25[07;11H[07;12H5.255.255.0
+Server: 10.0.2.2
+Gateway: 10.0.2.2
+kernel (nd)/sextant.elf
+   [Multiboot-el[11;16H[11;17Hf, <0x200000:0x24:0x0>, <0x201000:0x8c70:0x0>, <0x20a18d:0x0:0x
+43e73>, shtab=0x24e398, entry=0x201a74]
+booc[?7l[2J[0mSeaBIOS (version rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org)
+Booting from Hard Disk...
+Boot failed: could not read the boot disk
+
+Booting from Floppy...
+Boot failed: could not read the boot disk
+
+Booting from DVD/CD...
+Loading stage2 ....
+[01;01H[
