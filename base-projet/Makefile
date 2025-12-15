@@ -13,7 +13,7 @@ LD_Darwin=i386-elf-ld
 ##Pour Linux
 CPP_Linux=g++
 LD_Linux=ld
-COMPOP_Linux=-fno-stack-protector -m32 -O3
+COMPOP_Linux=-fno-stack-protector -m32 
 LIEUR_Linux=-m elf_i386
 QEMU=qemu-system-i386 
 
