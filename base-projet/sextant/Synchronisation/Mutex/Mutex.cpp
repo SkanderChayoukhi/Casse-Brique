@@ -7,20 +7,22 @@
 
 #include "Mutex.h"
 
+Mutex::Mutex() : Semaphore(1) {
+				 };
 
-Mutex::Mutex(){
-	Semaphore(1);
-};
-
-void Mutex::lock(){
+void Mutex::lock()
+{
 	lActivite = thread_get_current();
 	P();
 };
 
-sextant_ret_t Mutex::unlock(){
-	if (lActivite == thread_get_current()) {
+sextant_ret_t Mutex::unlock()
+{
+	if (lActivite == thread_get_current())
+	{
 		V();
 		return SEXTANT_OK;
 	}
-	else return SEXTANT_ERROR;
+	else
+		return SEXTANT_ERROR;
 };
